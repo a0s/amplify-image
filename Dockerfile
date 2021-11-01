@@ -21,16 +21,15 @@ RUN \
         wget
 
 RUN \
-    curl -fsSL https://deb.nodesource.com/setup_$NODEJS | bash && \
-    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null && \
-    echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && \
-    apt-get install -y nodejs yarn && \
-    npm i -g npm@^6 && \
-    apt-mark hold nodejs
-
-RUN \
     wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
     echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google.list && \
     apt-get update && \
-    apt-get install -y 	google-chrome-stable
+    apt-get install -y google-chrome-stable
+
+ARG NVM_DIR=/usr/local/nvm
+RUN \
+    mkdir -p $NVM_DIR && \
+    export NVM_DIR=$NVM_DIR && \
+    curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash && \
+    . $NVM_DIR/nvm.sh && \
+    nvm install v12
