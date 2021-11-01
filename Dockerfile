@@ -2,10 +2,8 @@
 FROM amazonlinux:2
 
 # Framework Versions
-ENV VERSION_NODE_8=8.12.0
-ENV VERSION_NODE_10=10.16.0
 ENV VERSION_NODE_12=12
-ENV VERSION_NODE_DEFAULT=$VERSION_NODE_10
+ENV VERSION_NODE_DEFAULT=$VERSION_NODE_12
 ENV VERSION_YARN=1.16.0
 ENV VERSION_AMPLIFY=1.12.0
 
@@ -76,10 +74,6 @@ RUN \
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 RUN curl -o- -L https://yarnpkg.com/install.sh > /usr/local/bin/yarn-install.sh
 RUN /bin/bash -c ". ~/.nvm/nvm.sh && \
-    nvm install $VERSION_NODE_8 && nvm use $VERSION_NODE_8 && \
-	nvm install $VERSION_NODE_10 && nvm use $VERSION_NODE_10 && \
-	npm install -g sm grunt-cli bower vuepress gatsby-cli && \
-    bash /usr/local/bin/yarn-install.sh --version $VERSION_YARN && \
 	nvm install $VERSION_NODE_12 && nvm use $VERSION_NODE_12 && \
 	npm install -g sm grunt-cli bower vuepress gatsby-cli && \
     bash /usr/local/bin/yarn-install.sh --version $VERSION_YARN && \
@@ -98,11 +92,8 @@ RUN /bin/bash -c ". ~/.nvm/nvm.sh && \
     nvm use ${VERSION_NODE_DEFAULT} && \
     npm install -g --unsafe-perm=true --allow-root cypress"
 
-## Install AWS Amplify CLI for VERSION_NODE_DEFAULT and VERSION_NODE_10
+## Install AWS Amplify CLI for VERSION_NODE_DEFAULT
 RUN /bin/bash -c ". ~/.nvm/nvm.sh && nvm use ${VERSION_NODE_DEFAULT} && \
-    npm config set user 0 && npm config set unsafe-perm true && \
-	npm install -g @aws-amplify/cli@${VERSION_AMPLIFY}"
-RUN /bin/bash -c ". ~/.nvm/nvm.sh && nvm use ${VERSION_NODE_10} && \
     npm config set user 0 && npm config set unsafe-perm true && \
 	npm install -g @aws-amplify/cli@${VERSION_AMPLIFY}"
 
